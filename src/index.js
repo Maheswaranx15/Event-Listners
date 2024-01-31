@@ -17,8 +17,8 @@ var options = {
     },
 };
 
-const currentWeb3 = new web3(new web3.providers.HttpProvider(process.env.MUMBAI_HTTP));
-const currentWeb3Socket = new web3(new web3.providers.WebsocketProvider(process.env.MUMBAI_WEBSOCKET,options));
+const currentWeb3 = new web3(new web3.providers.HttpProvider(process.env.HTTP));
+const currentWeb3Socket = new web3(new web3.providers.WebsocketProvider(process.env.WEBSOCKET,options));
 
 const contractInstance = new currentWeb3.eth.Contract(contractAbi,contractAddress);
 
@@ -87,7 +87,7 @@ const getWhiteListEvent = async() => {
 
 
 (async() => {
-    // await getWhiteListEvent();
+    await getWhiteListEvent();
 
     await getPastWhiteListEvent();
 })();
