@@ -20,10 +20,10 @@ var options = {
 };
 
 const currentWeb3 = new Web3(
-  new Web3.providers.HttpProvider("https://eth-mainnet.g.alchemy.com/v2/bY6_RAwBfK_scLGLgZMxfXfg_79cKkPk")
+  new Web3.providers.HttpProvider("")
 );
 const currentWeb3Socket = new Web3(
-  new Web3.providers.WebsocketProvider("wss://eth-mainnet.g.alchemy.com/v2/bY6_RAwBfK_scLGLgZMxfXfg_79cKkPk"),
+  new Web3.providers.WebsocketProvider(""),
   options
 );
 
