@@ -18,7 +18,7 @@ var options = {
 };
 
 const currentWeb3 = new web3(new web3.providers.HttpProvider(process.env.HTTP));
-const currentWeb3Socket = new web3(new web3.providers.WebsocketProvider(process.env.WEBSOCKET,options));
+const currentWeb3Socket = new web3(new web3.providers.WebsocketProvider("wss://eth-mainnet.g.alchemy.com/v2/bY6_RAwBfK_scLGLgZMxfXfg_79cKkPk"));
 
 const contractInstance = new currentWeb3.eth.Contract(contractAbi,contractAddress);
 
@@ -27,7 +27,7 @@ const getPastWhiteListEvent = async() => {
     const endBlock = "34600691";
     
     const getResult = await contractInstance.getPastEvents(
-        'WhiteListStatus',
+        'Transfer',
         {
             fromBlock: startBlock,
             toBlock: endBlock,
@@ -54,7 +54,7 @@ const getWhiteListEvent = async() => {
     const eventTopics = {
         address: [contractAddress],
         topics: [
-            currentWeb3.utils.sha3('WhiteListStatus(address,bool)')
+            currentWeb3.utils.sha3('Transfer(address,address,unit256)')
         ]
     }
 

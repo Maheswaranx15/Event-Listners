@@ -1,7 +1,7 @@
-import { Web3 } from "web3";
-import dotenv from "dotenv";
-import { contractAbi, contractAddress } from "./config/index.js";
-import { ethers } from 'ethers';
+const Web3 = require("web3");
+const dotenv = require("dotenv");
+const  { contractAbi, contractAddress } = require("./config/index.js")
+const { ethers } =  require('ethers');
 
 dotenv.config();
 
@@ -20,10 +20,10 @@ var options = {
 };
 
 const currentWeb3 = new Web3(
-  new Web3.providers.HttpProvider(process.env.ETH_HTTPS)
+  new Web3.providers.HttpProvider("https://eth-mainnet.g.alchemy.com/v2/bY6_RAwBfK_scLGLgZMxfXfg_79cKkPk")
 );
 const currentWeb3Socket = new Web3(
-  new Web3.providers.WebsocketProvider(process.env.ETH_WEBSOCKET),
+  new Web3.providers.WebsocketProvider("wss://eth-mainnet.g.alchemy.com/v2/bY6_RAwBfK_scLGLgZMxfXfg_79cKkPk"),
   options
 );
 
@@ -35,7 +35,7 @@ const contractInstance = new currentWeb3.eth.Contract(
 const getWhiteListEvent = async () => {
   const eventTopics = {
     address: [contractAddress],
-    topics: [currentWeb3.utils.sha3("TokensPaid(address,address,uint256,string)")],
+    topics: [currentWeb3.utils.sha3("Transfer(address,address,uint256)")],
   };
 
   const eventSubscribe = await currentWeb3Socket.eth.subscribe(
@@ -54,19 +54,18 @@ const getWhiteListEvent = async () => {
         ["address"],
         event.topics[1]
       );
-      let currency = currentWeb3.eth.abi.decodeParameters(
+      let to = currentWeb3.eth.abi.decodeParameters(
         ["address"],
         event.topics[2]
       );
-      let data = currentWeb3.eth.abi.decodeParameters(["uint256","string"], event.data);
-      const hash = `https://sepolia.etherscan.io/tx/${event.transactionHash}`;
-
+      let data = currentWeb3.eth.abi.decodeParameters(["uint256"], event.data);
+      const hash = `https://etherscan.io/tx/${event.transactionHash}`;
+      console.log((data[0]/10**6))
       const result = {
-        eventName: "TokensPaid",
-        account: user[0],
-        solAddress: data[1],
-        currency: currency[0],
-        amount: ethers.formatEther(data[0]),
+        eventName: "Transfer",
+        From: user[0],
+        To: to[0],
+        amount: data[0],
         transactionHash: hash,
         blockNumber: event.blockNumber,
       };
